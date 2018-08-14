@@ -1,0 +1,104 @@
+# 2018 Midterm Forecast Methodology
+Parker Quinn  
+7/2/2018  
+
+
+
+
+
+
+
+
+#### High stakes  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Americans will go to the polls this November to vote in the [midterm elections](https://en.wikipedia.org/wiki/United_States_elections,_2018){target="_blank"}, a set of general elections that occur every four years, typically near the halfway point of the president’s term. This fall, all 435 seats in the House are up for election, along with 35 Senate seats, 39 governorships, and many other state and local positions. The midterms are certainly important to those whose lives are affected by the policies of elected officials, but because they occur during the midpoint of a president’s term, they are also a kind of public assessment of the current administration. The results can dramatically alter the political landscape by creating new checks to power or reinforcing the status quo.  
+
+#### Defining the objectives  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Election models are typically developed to achieve one of the following goals:  
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-- Predict outcomes as accurately as possible  
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; **OR**
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-- Quantify the underlying mechanisms, either through causal models of voter and candidate behavior, or measurement of the factors that explain the results.  
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Predictive approaches have received increased public attention in recent years and come in many forms, including statistical models, poll aggregation, expert ratings, and betting odds. Causal modeling is mostly confined to academic research and receives far less media attention, but addresses important concerns like the impact of campaign spending, incumbency, and economic outcomes. [My master’s thesis](https://ssrn.com/abstract=3204653){target="_blank"} focused on this dichotomy and compared various models of U.S. congressional elections in an effort to reconcile methodological differences. Although both types of election models – predictive and causal – are important, this forecast focuses on making accurate predictions of elections for the U.S. House of Representatives. *(A separate interactive with causal models is in the works, so check back soon!)* Specifically, we are looking for predictions that are:  
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ***District-level*** - predictions for individual districts can identify competitive elections, and we can aggregate them to quantify the national landscape.  
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;***Probabilistic*** – proper forecasts capture the inherent uncertainty of future events. Instead of predicting a winner or specific vote share, predictions should be represented as probabilities.  
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;***Supported by theory*** – the data and features that drive the model should be diverse and all of the analytical decisions should be supported in the existing body of knowledge.  
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;***Frequently updated*** – as new information becomes available, conditions change, so our predictions should too.  
+
+
+#### A valuable exercise  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Why do we try to predict political elections? Although [some people are averse to probabilistic estimates](https://www.youtube.com/watch?v=Ea2HS8NL4s4){target="_blank"}, the simplest explanation is that election forecasts satisfy our natural curiosity and desire to quantify uncertain events. To some, election forecasting is a stimulating hobby and a chance to test new methods in real-world situations (or to secure bragging rights). Most concretely, election models are useful to many stakeholders – accurate and interpretable predictions can inform the decisions of candidates, media outlets, voters, donors, and other political establishments.  
+
+
+#### Gathering raw materials  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;To make predictions for individual districts, we need district-level data that is predictive of election outcomes. This is the most difficult part of congressional forecasting models because there are 435 districts with only about 700,000 people each. Luckily, congressional elections are held every two years, much more frequently than, say, presidential elections. There are many sources of district-level data that may be helpful, and as we noted above, past research can (and should) provide clues about where to look. The census bureau releases district-level demographic and economic data, and past election results (for both local and national elections) are compiled by sites like [DailyKos](https://www.dailykos.com/stories/2018/2/21/1742660/-The-ultimate-Daily-Kos-Elections-guide-to-all-of-our-data-sets){target="_blank"}, [CLEA](http://www.electiondataarchive.org/){target="_blank"}, and [Cook Political Report](https://www.cookpolitical.com/ratings/house-race-ratings){target="_blank"}. The [Federal Election Commission (FEC)](https://classic.fec.gov/data/CandidateSummary.do){target="_blank"} compiles detailed information on candidate spending and incumbency, which are covered extensively by academic literature. Ideological extremity is also an interesting topic of election research, and the website [Voteview](https://voteview.com/data){target="_blank"} provides ideological scores for every congressperson based on their voting history. [Sabato’s Crystal Ball](http://www.centerforpolitics.org/crystalball/2018-house/){target="_blank"} has an excellent track record of using expert knowledge to rate every election, and the literature suggests that combining qualitative knowledge with quantitative methods can increase accuracy.  
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;It is likely that national trends also affect the outcomes of individual district elections. For example, the effect of a midterm year on presidential party seat loss is well documented. We can easily include indicators for midterm election years and the sitting president’s party. We can also use national-level polls to capture the national swing in favor of one party or the other. Most congressional election forecasts aggregate national house generic ballot polls, which ask respondent’s which party they intend to vote for in the upcoming congressional election. It is important to aggregate the various polls to reduce error and bias. Here, we will use the [Fivethirtyeight](https://projects.fivethirtyeight.com/congress-generic-ballot-polls/?ex_cid=rrpromo){target="_blank"} polling average to measure national-level support for the Democratic Party.  
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;We also want to create new variables by transforming or combining these data to increase predictive accuracy. These new variables are called [features](https://en.wikipedia.org/wiki/Feature_engineering){target="_blank"}, and their creation should also be informed by theory. For example, if the literature suggests that there are diminishing returns to candidate spending, it might be prudent to take a log-transformation of the candidate spending variables, or create a new variable that measures the difference in spending between candidates.  
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;In the end, this model uses dozens of variables for each district election going back to 2006. For more detailed information about the data, you can find the data dictionary and create exploratory charts in the “Explore the data” section.
+	
+#### Predicting vote share  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The next challenge is to create a model that predicts vote share for the Democratic candidate in each district. There are [hundreds of statistical models](https://machinelearningmastery.com/a-tour-of-machine-learning-algorithms/){target="_blank"} to choose from, and even more possibilities when choosing which variables to include. Here, we will use a [random forest](https://en.wikipedia.org/wiki/Random_forest){target="_blank"} algorithm to predict vote share. A random forest algorithm is an [“ensemble”](https://en.wikipedia.org/wiki/Ensemble_learning){target="_blank"} learning method that essentially combines many [decision trees](https://en.wikipedia.org/wiki/Decision_tree_learning){target="_blank"} that have slight differences in their input variables. There are a few benefits to the random forest for this particular problem. In general, random forests address the tendency of decisions trees to over-fit the data. A random forest is also a very accurate model in this case – when it is trained on data from 2006-2014 and evaluated on 2016 data, the mean absolute error is 2.8 percentage points and the [root mean squared error](https://en.wikipedia.org/wiki/Root-mean-square_deviation){target="_blank"} is 3.7 percentage points. Looking at the predicted versus actual 2016 values and distribution of errors below, we can be confident in the accuracy of this model. 
+
+<img src="forecastMethodology_files/figure-html/unnamed-chunk-2-1.png" style="display: block; margin: auto;" />
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The random forest is also an excellent choice given our data set – since we have so many features, but do not know exactly which ones will be most predictive and which to ignore, the random forest can be tuned to find the most important variables. For this forecast, the random forest will be trained on data from 2006-2016 to create predictions for 2018. The model will use ten randomly chosen independent variables per tree, and combine the results from 500 of these trees (this is called [bootstrap-aggregating](https://en.wikipedia.org/wiki/Bootstrap_aggregating){target="_blank"}, or “bagging”). The model provides output that describes the importance of each variable when producing the predictions, which can be informative.  
+
+![](forecastMethodology_files/figure-html/unnamed-chunk-3-1.png)<!-- -->
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This model appears to rely heavily on the Sabato ratings, national polls, previous election results, and midterm indicators, with somewhat lower emphasis on demographics, candidate spending, and ideology. For more information about the variables, go to the “Explore the data” section. We now have point-predictions for the Democrat’s two-party vote share in each district election! But there is still work to do…  
+
+
+#### Simulating the results  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;One of the objectives for this forecast is to produce probabilistic estimates to capture the uncertainty around point estimates of vote share. For example, if we predict the Democratic candidate in a certain district to receive 51% of the vote, how confident are we that the Democrat will win? Here, we will use a [Markov chain Monte Carlo](https://en.wikipedia.org/wiki/Markov_chain_Monte_Carlo){target="_blank"} simulation, making small changes to the observed data and recording the corresponding changes to the predictions, and repeating this process many times.  
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;A good place to make these small changes is in the national polling average because we can estimate an error distribution for it. Based on the difference between past polling averages and actual national vote shares, we can change the current polling average estimates, and recalculate our predictions. From there, we make another shift in the predicted vote shares by assuming that errors in individual districts are due to a systemic error in the model. For example, if we underestimate the Democrat’s vote share in one district, it is more likely that we underestimated Democratic support across all districts. To account for this, we make small, correlated shifts in each district’s prediction. This entire process is repeated thousands of times, and the number of Democratic seats is counted in each iteration. Let’s say we simulate each district 10,000 times, and Democratic candidates win at least 218 seats in 5,500 of them – we would say that Democrats have a 55% chance of taking control of the House this November. Using the same method, we can estimate the probabilities in each district to identify competitive elections.  
+	
+#### Updating the model  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Since several of the variables in this model change over time, we want to frequently update the forecast with the latest information. This model is updated every day with the latest:  
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1.	Fivethirtyeight national polling average  
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.	Candidate expenditures reported by the FEC  
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3.	Open elections (incumbent candidate not running)  
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4.	Unchallenged elections (no major party challenger to the incumbent party)  
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;5.	Incumbent ideology score  
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;6.	Sabato’s Crystal Ball ratings  
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;And with that, we have created a midterm election forecast that is district-level (but can be used to make national inferences), probabilistic, supported by theory, and frequently updated. Awesome!  
+
+
+#### Notes and other models  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;You may have noticed that is not a true “forecast” because we do not estimate certain variables into the future such as the national polling average or candidate spending. To be more precise, this should be considered something closer to a “now-cast” – predictions of the elections if they were held today. There are other election models that are a true forecast – I recommend [The Crosstab](http://www.thecrosstab.com/2018-midterms-forecast/){target="_blank"} and [The Economist](https://www.economist.com/graphic-detail/2018/05/24/whos-ahead-in-the-mid-term-race){target="_blank"} election models. Special thanks to G. Elliott Morris from The Crosstab for help putting together this app and model. Thanks also to all of the people that provide their election data online for free, including [DailyKos](https://www.dailykos.com/stories/2018/2/21/1742660/-The-ultimate-Daily-Kos-Elections-guide-to-all-of-our-data-sets){target="_blank"}, [CLEA](http://www.electiondataarchive.org/){target="_blank"}, [Cook Political Report](https://www.cookpolitical.com/ratings/house-race-ratings){target="_blank"}, [Sabato’s Crystal Ball](http://www.centerforpolitics.org/crystalball/2018-house/){target="_blank"}, and [Voteview.](https://voteview.com/data){target="_blank"} If you have any questions about this model, or would like to see the code, please visit the “Contact me” page.  
