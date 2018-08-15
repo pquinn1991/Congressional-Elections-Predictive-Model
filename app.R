@@ -105,7 +105,9 @@ ui <- navbarPage(title = "2018 Midterms", tabPanel("Forecast", fluidPage(
     )
   )), 
   #Contact me tab
-  tabPanel("Contact", actionLink("email", h5(a("Email me at pquinn91@gmail.com", href="mailto:pquinn91@gmail.com"))),
+  tabPanel("Contact", helpText(a("Check out my website", href="http://www.parkermquinn.com", target="_blank")),
+           br(),
+           actionLink("email", h5(a("Email me at pquinn91@gmail.com", href="mailto:pquinn91@gmail.com"))),
            br(),
            helpText(a("Find me on Twitter! @parkermquinn", href="https://twitter.com/parkermquinn", target="_blank"))
            ))
